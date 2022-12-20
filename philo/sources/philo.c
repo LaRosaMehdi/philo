@@ -1,24 +1,5 @@
 #include "../includes/includes.h"
 
-int	philos_melody(void *data)
-{
-	t_data	*d;
-	
-	d = (t_data*)data;
-	while (1)
-	{
-		pthread_mutex_lock(&d->end);
-		if (d->is_end == true)
-		{
-			pthread_mutex_unlock(&d->end);
-			return (1);
-		}
-		pthread_mutex_unlock(&d->end);
-		usleep(100);
-	}
-	return (0);
-}
-
 void	*philos_function(void *philo)
 {
 	t_philo	*p;
