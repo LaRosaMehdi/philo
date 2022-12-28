@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mla-rosa <mla-rosa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/27 18:00:24 by mla-rosa          #+#    #+#             */
+/*   Updated: 2022/12/27 18:14:37 by mla-rosa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/includes.h"
 
 void	*philos_function(void *philo)
@@ -27,9 +39,11 @@ int	philos_launcher(t_data *data)
 	idx = -1;
 	while (++idx < data->nbphilos)
 	{
-		pthread_create(&data->philosopher[idx].thread, NULL, philos_function, &data->philosopher[idx]);
+		pthread_create(&data->philosopher[idx].thread,
+			NULL, philos_function, &data->philosopher[idx]);
 		usleep(100);
 	}
-	while (data->is_end == false);
+	while (data->is_end == false)
+		;
 	return (0);
 }

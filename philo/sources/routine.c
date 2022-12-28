@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   routine.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mla-rosa <mla-rosa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/27 18:00:28 by mla-rosa          #+#    #+#             */
+/*   Updated: 2022/12/27 18:12:57 by mla-rosa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/includes.h"
 
-void routine_output(t_philo *philo, char *routine, bool option)
+void	routine_output(t_philo *philo, char *routine, bool option)
 {
-	t_data *data;
-	
-	data = (t_data*)philo->data;
+	t_data	*data;
+
+	data = (t_data *)philo->data;
 	pthread_mutex_lock(&data->end);
 	if (data->is_end == true)
 		return ((void)pthread_mutex_unlock(&data->end));
@@ -17,12 +29,13 @@ void routine_output(t_philo *philo, char *routine, bool option)
 	pthread_mutex_unlock(&data->output);
 }
 
-bool routine_the_death(t_philo *philo)
+bool	routine_the_death(t_philo *philo)
 {
-	t_data *data = NULL;
+	t_data	*data;
 
-	data = (t_data*)philo->data;
-	if (philo->is_eating == false && philo->limit > 0 && timestamp(data) > philo->limit)
+	data = (t_data *)philo->data;
+	if (philo->is_eating == false && philo->limit > 0
+		&& timestamp(data) > philo->limit)
 	{
 		routine_output(philo, "died", false);
 		pthread_mutex_lock(&data->end);
@@ -33,16 +46,16 @@ bool routine_the_death(t_philo *philo)
 	return (false);
 }
 
-bool routine_option(t_data *data)
+bool	routine_option(t_data *data)
 {
-	int i;
+	int	i;
 
 	if (data->nb_must_eat == -1)
 		return (false);
 	i = -1;
 	while (++i < data->nbphilos)
 	{
-		if (data->philosopher[i].nb_lunch < data->nb_must_eat) 
+		if (data->philosopher[i].nb_lunch < data->nb_must_eat)
 			return (false);
 	}
 	routine_output(&data->philosopher[0], "must it counter reached", true);
@@ -52,7 +65,7 @@ bool routine_option(t_data *data)
 	return (true);
 }
 
-void routine_eat(t_data *data, t_philo *philo)
+void	routine_eat(t_data *data, t_philo *philo)
 {
 	pthread_mutex_lock(philo->forks[0].mutex);
 	routine_output(philo, "has taken a fork", false);
@@ -67,11 +80,11 @@ void routine_eat(t_data *data, t_philo *philo)
 	philo->is_eating = false;
 }
 
-void routine(t_philo *philo)
+void	routine(t_philo *philo)
 {
-	t_data *data;
-	
-	data = (t_data*)philo->data;
+	t_data	*data;
+
+	data = (t_data *)philo->data;
 	routine_eat(data, philo);
 	if (data->nb_must_eat > -1)
 	{
@@ -83,4 +96,3 @@ void routine(t_philo *philo)
 	usleep(data->ttsleep * 1000);
 	routine_output(philo, "is thinking", false);
 }
-		
