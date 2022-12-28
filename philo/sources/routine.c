@@ -17,11 +17,11 @@ void	routine_output(t_philo *philo, char *routine, bool option)
 	t_data	*data;
 
 	data = (t_data *)philo->data;
+	pthread_mutex_lock(&data->output);
 	pthread_mutex_lock(&data->end);
 	if (data->is_end == true)
 		return ((void)pthread_mutex_unlock(&data->end));
 	pthread_mutex_unlock(&data->end);
-	pthread_mutex_lock(&data->output);
 	if (option == false)
 		printf("%ld\t%d %s\n", timestamp(data), philo->name, routine);
 	else

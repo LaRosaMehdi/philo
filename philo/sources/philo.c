@@ -12,6 +12,21 @@
 
 #include "../includes/includes.h"
 
+void	*philo_monitor(void *philo)
+{
+	t_philo	*p;
+	t_data	*data;
+
+	p = (t_philo *)philo;
+	data = (t_data *)p->data;
+	while (data->is_end == false)
+	{
+		if (routine_the_death(p) == true || routine_option(data) == true)
+			return ((void *)1);
+	}
+	return ((void *)0);
+}
+
 void	*philos_function(void *philo)
 {
 	t_philo	*p;
@@ -23,11 +38,13 @@ void	*philos_function(void *philo)
 		usleep(1000);
 	pthread_detach(p->thread);
 	p->limit = timestamp(data) + data->ttdie;
+	pthread_create(&p->monitor, NULL, philo_monitor, p);
 	while (data->is_end == false)
 	{
-		if (routine_the_death(p) == true || routine_option(data) == true)
-			return ((void *)1);
 		routine(philo);
+		if (data->is_end == true)
+			return ((void *)1);
+		
 	}
 	return ((void *)0);
 }

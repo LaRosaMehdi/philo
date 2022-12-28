@@ -30,6 +30,7 @@ typedef struct s_fork
 typedef struct s_philo
 {
 	pthread_t		thread;
+	pthread_t		monitor;
 	t_fork			forks[2];
 	int				name;
 	long			limit;
